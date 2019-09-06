@@ -265,6 +265,31 @@ textarea {
 }
 
 /* my stuff */
+h1 {
+  text-align: center;
+}
+
+.info-box {
+  margin: 15px auto;
+  padding: 15px;
+  width: 500px;
+  height: 100px;
+  background-color: lightgray;
+}
+
+.info {
+  color: blue;
+}
+
+.error {
+  color: red;
+}
+
+.info,
+.error {
+  text-align: center;
+}
+
 .play-field {
   display: flex;
   flex-direction: row;
@@ -281,6 +306,9 @@ textarea {
   box-sizing: border-box;
   line-height: 100px;
   text-align: center;
+}
+.widget.winning {
+  background-color: red;
 }
 .widget:nth-child(3n+1) {
   border-right: solid 1px black;

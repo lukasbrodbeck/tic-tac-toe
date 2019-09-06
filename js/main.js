@@ -2,6 +2,10 @@
   let currentTurn = 'X';
   let selectedPlayerX = [];
   let selectedPlayerO = [];
+  let $infoBox = $('#info');
+  let $errorBox = $('#error');
+  let turnCounter = 0;
+  let isStarted = false;
   let winningPossibilityArray = [];
   winningPossibilityArray[0] = [1, 2, 3];
   winningPossibilityArray[1] = [4, 5, 6];
@@ -16,19 +20,21 @@
 
   function buildPlayField() {
     for (let position = 1; position < 10; position++) {
-      $('#play-field').append('<div class="widget" data-position="' + position + '">' + position + '</div>');
+      $('#play-field').append('<div class="widget" data-position="' + position + '"></div>');
     }
 
-    let widgets = $('.widget');
-    widgets.on('click', (e) => selectWidget(e));
+    isStarted = true;
+    $('.widget').on('click', (e) => selectWidget(e));
   }
 
   function selectWidget(e) {
-    let currentItem = $(e.currentTarget);
+    let $currentItem = $(e.currentTarget);
 
-    if (currentItem.data('tagged') === undefined) {
-      let currentPosition = currentItem.data('position');
-      currentItem.text(currentTurn);
+    if (isStarted && $currentItem.data('tagged') === undefined) {
+      let currentPosition = $currentItem.data('position');
+      $currentItem.text(currentTurn);
+      turnCounter++;
+      $errorBox.text('');
       e.currentTarget.setAttribute('data-tagged', currentTurn);
 
       if (currentTurn === 'X') {
@@ -38,12 +44,18 @@
       }
 
       if (checkForWinner(currentPosition)) {
-        endGame();
+        endGame(true);
+      } else if (turnCounter >= 9) {
+        endGame(false);
+      } else {
+        changeTurn();
       }
-
-      changeTurn();
     } else {
-      //TODO display invalid turn
+      if (!isStarted) {
+        $errorBox.text('Das Spiel ist vorbei. Bitte ein neues starten.');
+      } else {
+        $errorBox.text('Dieses Feld kann leider nicht gewählt werden.');
+      }
     }
   }
 
@@ -65,6 +77,7 @@
         }
 
         if (counter === 3) {
+          markWinner(e);
           return true;
         }
       }
@@ -73,12 +86,23 @@
     return false;
   }
 
-  function endGame() {
-    console.log(currentTurn + ' has won the game.');
-    //TODO build a sequence to end the game
+  function endGame(isWinner) {
+    isStarted = false;
+    if (isWinner) {
+      $infoBox.text('Der Spieler ' + currentTurn + ' hat das Spiel gewonnen');
+    } else {
+      $infoBox.text('Unentschieden. Es ist kein Zug mehr möglich, aber es hat auch niemand gewonnen.');
+    }
   }
 
   function changeTurn() {
     currentTurn = currentTurn ==='X' ? 'O' : 'X';
+    $infoBox.text('Der Spieler ' + currentTurn + ' ist an der Reihe');
+  }
+
+  function markWinner(e) {
+    for (let position of e) {
+      $('#play-field').find(`[data-position='${position}']`).addClass('winning');
+    }
   }
 }
