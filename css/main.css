@@ -290,6 +290,12 @@ h1 {
   text-align: center;
 }
 
+.button-wrapper {
+  display: flex;
+  justify-content: center;
+  margin: 15px;
+}
+
 .play-field {
   display: flex;
   flex-direction: row;

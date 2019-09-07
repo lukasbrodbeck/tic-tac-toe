@@ -4,6 +4,8 @@
   let selectedPlayerO = [];
   let $infoBox = $('#info');
   let $errorBox = $('#error');
+  let $startButton = $('#start-button');
+  let $playField = $('#play-field');
   let turnCounter = 0;
   let isStarted = false;
   let winningPossibilityArray = [];
@@ -16,15 +18,23 @@
   winningPossibilityArray[6] = [1, 5, 9];
   winningPossibilityArray[7] = [3, 5, 7];
 
-  buildPlayField();
+  $startButton.on('click', () => startGame());
+
+  function startGame() {
+    $playField.html('');
+    selectedPlayerX = [];
+    selectedPlayerO = [];
+    buildPlayField();
+    isStarted = true;
+    turnCounter = 0;
+    currentTurn = 'X';
+  }
 
   function buildPlayField() {
     for (let position = 1; position < 10; position++) {
-      $('#play-field').append('<div class="widget" data-position="' + position + '"></div>');
+      $playField.append('<div class="widget" data-position="' + position + '"></div>');
     }
-
-    isStarted = true;
-    $('.widget').on('click', (e) => selectWidget(e));
+    $playField.find('.widget').on('click', (e) => selectWidget(e));
   }
 
   function selectWidget(e) {
@@ -102,7 +112,7 @@
 
   function markWinner(e) {
     for (let position of e) {
-      $('#play-field').find(`[data-position='${position}']`).addClass('winning');
+      $playField.find(`[data-position='${position}']`).addClass('winning');
     }
   }
 }
