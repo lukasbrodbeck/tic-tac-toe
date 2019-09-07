@@ -32,7 +32,7 @@
 
   function buildPlayField() {
     for (let position = 1; position < 10; position++) {
-      $playField.append('<div class="widget" data-position="' + position + '"></div>');
+      $playField.append('<div class="widget" data-position="' + position + '" data-tagged="false"></div>');
     }
     $playField.find('.widget').on('click', (e) => selectWidget(e));
   }
@@ -40,12 +40,12 @@
   function selectWidget(e) {
     let $currentItem = $(e.currentTarget);
 
-    if (isStarted && $currentItem.data('tagged') === undefined) {
+    if (isStarted && $currentItem.data('tagged') === false) {
       let currentPosition = $currentItem.data('position');
-      $currentItem.text(currentTurn);
+      $currentItem.addClass(currentTurn.toLowerCase());
+      $currentItem.data('tagged', true);
       turnCounter++;
       $errorBox.text('');
-      e.currentTarget.setAttribute('data-tagged', currentTurn);
 
       if (currentTurn === 'X') {
         selectedPlayerX.push(currentPosition);
