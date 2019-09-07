@@ -101,7 +101,7 @@
     if (isWinner) {
       $infoBox.text('Der Spieler ' + currentTurn + ' hat das Spiel gewonnen');
     } else {
-      $infoBox.text('Unentschieden. Es ist kein Zug mehr möglich, aber es hat auch niemand gewonnen.');
+      $infoBox.text('Unentschieden. Es ist kein Zug mehr möglich.');
     }
   }
 
