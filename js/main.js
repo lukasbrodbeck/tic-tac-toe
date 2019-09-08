@@ -21,16 +21,10 @@
   winningPossibilityArray[7] = [3, 5, 7];
 
   //semantic UI - instantiating of form + popup message
-  $('#difficulty').dropdown();
+  $('.ui.select-field').dropdown();
   $('.ui.checkbox').checkbox();
   $errorMessage.find('.close')
-    .on('click', function() {
-      $(this)
-        .closest('.message')
-        .transition('fade')
-      ;
-    })
-  ;
+    .on('click', () => toggleErrorMessage());
 
   $startButton.on('click', () => startGame());
 
@@ -43,7 +37,7 @@
     isStarted = true;
     buildPlayField();
     $infoBox.html('Neues Spiel gestartet ' + getCurrentPlayer() + ' ist an der Reihe.');
-    toggleErrorMessage('');
+    toggleErrorMessage();
     turnCounter = 0;
     difficultyLevel = $('#difficulty-selection').find('.selected').data('value');
 
@@ -87,7 +81,7 @@
    */
   function markField(position) {
     $playField.find(`[data-position='${position}']`).addClass(getCurrentPlayer().toLowerCase());
-    toggleErrorMessage('');
+    toggleErrorMessage();
   }
 
   /**
@@ -230,11 +224,10 @@
    * @param {string} errorMessage
    */
   function toggleErrorMessage(errorMessage = '') {
-    if (errorMessage !== '') {
-      $errorMessage.removeClass('hidden');
-    } else {
-      $errorMessage.addClass('hidden');
+    // .transition() already toggles the message, so we need to check whether we really want to trigger it or not
+    if ((errorMessage !== '' && !$errorMessage.hasClass('visible')) || (errorMessage === '' && $errorMessage.hasClass('visible') && !$errorMessage.hasClass('zoom'))) {
+      $errorMessage.transition('zoom', 200);
+      $errorMessage.find('#error-text').text(errorMessage);
     }
-    $errorMessage.find('#error-text').text(errorMessage);
   }
 }

@@ -269,18 +269,22 @@ h1 {
   text-align: center;
 }
 
+main {
+  padding: 15px;
+}
+
 .info-box {
   margin: 15px auto;
   max-width: 500px;
   position: relative;
 }
 
-.error-message {
-  width: 500px;
+.alert {
+  position: fixed;
   z-index: 100;
   top: 0;
-  position: absolute !important;
-  transition: all .5s;
+  width: calc(100% - 30px);
+  margin: 15px;
 }
 
 .info,

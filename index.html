@@ -22,13 +22,17 @@
   <header>
     <h1>Dodelschach</h1>
   </header>
+
+  <div class="alert">
+    <div class="ui message negative error-message hidden">
+      <i class="close icon"></i>
+      <div class="header">Error:</div>
+      <p id="error-text"></p>
+    </div>
+  </div>
+
   <main>
     <div class="info-box">
-      <div class="ui message negative error-message hidden">
-        <i class="close icon"></i>
-        <div class="header">Error:</div>
-        <p id="error-text"></p>
-      </div>
       <div class="ui message">
         <div id="info">Starten Sie ein Spiel</div>
       </div>
@@ -36,9 +40,9 @@
 
     <div class="settings ui form ">
       <div class="difficulty-setting field">
-        <label for="difficulty">Schwierigkeitsgrad</label>
+        <label>Schwierigkeitsgrad</label>
         <div class="ui dropdown selection" id="difficulty-selection">
-          <select name="difficulty" id="difficulty">
+          <select class="ui select-field" name="difficulty" id="difficulty">
             <option value="0">Menschlicher Gegner</option>
             <option value="1">Easy</option>
             <option value="2">Medium</option>
@@ -48,6 +52,7 @@
           <div class="text"></div>
         </div>
       </div>
+
       <div class="field">
         <div class="ui toggle checkbox" id="starting-checkbox">
           <input type="checkbox" tabindex="0" class="hidden">
