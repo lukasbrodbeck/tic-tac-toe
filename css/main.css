@@ -271,23 +271,27 @@ h1 {
 
 .info-box {
   margin: 15px auto;
-  padding: 15px;
   max-width: 500px;
-  height: 100px;
-  background-color: lightgray;
+  position: relative;
 }
 
-.info {
-  color: blue;
-}
-
-.error {
-  color: red;
+.error-message {
+  width: 500px;
+  z-index: 100;
+  top: 0;
+  position: absolute !important;
+  transition: all .5s;
 }
 
 .info,
 .error {
   text-align: center;
+}
+
+.settings {
+  display: flex;
+  justify-content: center;
+  margin: 15px;
 }
 
 .button-wrapper {
@@ -306,7 +310,7 @@ h1 {
   margin: auto;
 }
 
-.field {
+.field-box {
   width: 100px;
   height: 100px;
   margin: auto;
@@ -316,8 +320,8 @@ h1 {
   position: relative;
 }
 
-.field::before,
-.field::after {
+.field-box::before,
+.field-box::after {
   content: "";
   display: block;
   width: 50px;
@@ -325,16 +329,16 @@ h1 {
   position: absolute;
 }
 
-.field.winning {
+.field-box.winning {
   background-color: rgba(238, 118, 0, 0.2);
 }
-.field:nth-child(3n+1) {
+.field-box:nth-child(3n+1) {
   border-right: solid 1px black;
 }
-.field:nth-child(3n+2) {
+.field-box:nth-child(3n+2) {
   border-right: solid 1px black;
 }
-.field:nth-child(n+4) {
+.field-box:nth-child(n+4) {
   border-top: solid 1px black;
 }
 

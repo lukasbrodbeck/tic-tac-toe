@@ -12,28 +12,45 @@
   <!-- Place favicon.ico in the root directory -->
 
   <link rel="stylesheet" href="css/normalize.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.4.1/semantic.min.css" />
   <link rel="stylesheet" href="css/main.css">
 
   <meta name="theme-color" content="#fafafa">
 </head>
 
 <body>
-  <!--[if IE]>
-    <p class="browserupgrade">You are using an <strong>outdated</strong> browser. Please <a href="https://browsehappy.com/">upgrade your browser</a> to improve your experience and security.</p>
-  <![endif]-->
-
   <header>
     <h1>Dodelschach</h1>
   </header>
-  <!-- Add your site or application content here -->
   <main>
     <div class="info-box">
-      <div id="info" class="info">Starten Sie ein Spiel</div>
-      <div id="error" class="error"></div>
+      <div class="ui message negative error-message hidden">
+        <i class="close icon"></i>
+        <div class="header">Error:</div>
+        <p id="error-text"></p>
+      </div>
+      <div class="ui message">
+        <div id="info">Starten Sie ein Spiel</div>
+      </div>
     </div>
 
+    <div class="settings ui form ">
+      <div class="difficulty-setting field">
+        <label for="difficulty">Schwierigkeitsgrad</label>
+        <div class="ui dropdown selection" id="difficulty-selection">
+          <select name="difficulty" id="difficulty">
+            <option value="0">Menschlicher Gegner</option>
+            <option value="1">Easy</option>
+            <option value="2">Medium</option>
+            <option value="3">Hard (soon)</option>
+          </select>
+          <i class="dropdown icon"></i>
+          <div class="text">Connecticut</div>
+        </div>
+      </div>
+    </div>
     <div class="button-wrapper">
-      <button type="button" class="button" id="start-button">Spiel starten</button>
+      <button type="button" class="ui button" id="start-button">Spiel starten</button>
     </div>
 
     <div class="play-field" id="play-field"></div>
@@ -44,15 +61,9 @@
   <script src="js/vendor/modernizr-3.7.1.min.js"></script>
   <script src="https://code.jquery.com/jquery-3.4.1.min.js" integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script>
   <script>window.jQuery || document.write('<script src="js/vendor/jquery-3.4.1.min.js"><\/script>')</script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.4.1/semantic.min.js"></script>
   <script src="js/plugins.js"></script>
   <script src="js/main.js"></script>
-
-<!-- Google Analytics: change UA-XXXXX-Y to be your site's ID. -->
-<!--  <script>-->
-<!--    window.ga = function () { ga.q.push(arguments) }; ga.q = []; ga.l = +new Date;-->
-<!--    ga('create', 'UA-XXXXX-Y', 'auto'); ga('set','transport','beacon'); ga('send', 'pageview')-->
-<!--  </script>-->
-<!--  <script src="https://www.google-analytics.com/analytics.js" async></script>-->
 </body>
 
 </html>

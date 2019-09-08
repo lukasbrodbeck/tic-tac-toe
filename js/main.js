@@ -2,13 +2,13 @@
   let currentTurn;
   let selectedArray = [];
   let $infoBox = $('#info');
-  let $errorBox = $('#error');
+  let $errorMessage = $('.error-message');
   let $startButton = $('#start-button');
   let $playField = $('#play-field');
   let turnCounter = 0;
   let isStarted = false;
   // there are 3 difficulty levels, 1: total random movement, 2: tries to win/prevent if possible, 3: makes you cry
-  let difficultyLevel = 1;
+  let difficultyLevel;
   let winningPossibilityArray = [];
   winningPossibilityArray[0] = [1, 2, 3];
   winningPossibilityArray[1] = [4, 5, 6];
@@ -18,6 +18,15 @@
   winningPossibilityArray[5] = [3, 6, 9];
   winningPossibilityArray[6] = [1, 5, 9];
   winningPossibilityArray[7] = [3, 5, 7];
+  $('#difficulty').dropdown();
+  $errorMessage.find('.close')
+    .on('click', function() {
+      $(this)
+        .closest('.message')
+        .transition('fade')
+      ;
+    })
+  ;
 
   $startButton.on('click', () => startGame());
 
@@ -27,16 +36,17 @@
     isStarted = true;
     buildPlayField();
     $infoBox.html('Neues Spiel gestartet ' + getCurrentPlayer() + ' ist an der Reihe.');
-    $errorBox.html('');
+    toggleErrorMessage('');
     turnCounter = 0;
+    difficultyLevel = $('#difficulty-selection').find('.selected').data('value');
   }
 
   function buildPlayField() {
     for (let position = 1; position < 10; position++) {
-      $playField.append('<div class="field" data-position="' + position + '"></div>');
+      $playField.append('<div class="field-box" data-position="' + position + '"></div>');
       selectedArray[position] = 0;
     }
-    $playField.find('.field').on('click', (e) => selectField(e));
+    $playField.find('.field-box').on('click', (e) => selectField(e));
   }
 
   function selectField(e) {
@@ -46,16 +56,16 @@
       makeAMove(currentPosition);
     } else {
       if (!isStarted) {
-        $errorBox.text('Das Spiel ist vorbei. Bitte starten Sie ein neues.');
+        toggleErrorMessage('Das Spiel ist vorbei. Bitte starten Sie ein neues.');
       } else {
-        $errorBox.text('Dieses Feld ist bereits gewählt, wählen Sie ein anders aus.');
+        toggleErrorMessage('Dieses Feld ist bereits gewählt, wählen Sie ein anders aus.');
       }
     }
   }
 
   function markField(position) {
     $playField.find(`[data-position='${position}']`).addClass(getCurrentPlayer().toLowerCase());
-    $errorBox.text('');
+    toggleErrorMessage('');
   }
 
   function makeAMove (position) {
@@ -97,7 +107,7 @@
   function changeTurn() {
     currentTurn = -currentTurn;
     $infoBox.text('Der Spieler ' + getCurrentPlayer() + ' ist an der Reihe');
-    if (currentTurn === -1) {
+    if (difficultyLevel > 0 && currentTurn === -1) {
       npcMove();
     }
   }
@@ -155,5 +165,14 @@
 
   function arraySum(array) {
     return selectedArray[array[0]] + selectedArray[array[1]] + selectedArray[array[2]];
+  }
+
+  function toggleErrorMessage(errorMessage) {
+    if (errorMessage !== '') {
+      $errorMessage.removeClass('hidden');
+    } else {
+      $errorMessage.addClass('hidden');
+    }
+    $errorMessage.find('#error-text').text(errorMessage);
   }
 }
