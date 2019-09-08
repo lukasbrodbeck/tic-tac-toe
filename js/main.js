@@ -62,9 +62,9 @@
       }
     } else {
       if (!isStarted) {
-        $errorBox.text('Das Spiel ist vorbei. Bitte ein neues starten.');
+        $errorBox.text('Das Spiel ist vorbei. Bitte starten Sie ein neues.');
       } else {
-        $errorBox.text('Dieses Feld kann leider nicht gewählt werden.');
+        $errorBox.text('Dieses Feld ist bereits gewählt, wählen Sie ein anders aus.');
       }
     }
   }

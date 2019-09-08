@@ -272,7 +272,7 @@ h1 {
 .info-box {
   margin: 15px auto;
   padding: 15px;
-  width: 500px;
+  max-width: 500px;
   height: 100px;
   background-color: lightgray;
 }
