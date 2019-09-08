@@ -73,17 +73,13 @@
   }
 
   function checkForWinner() {
-    for (let e of winningPossibilityArray) {
-      let counter = 0;
-        for (let element of e) {
-          counter += selectedArray[element];
+    for (let winningPossibility of winningPossibilityArray) {
+      let counter = arraySum(winningPossibility);
+      if (counter === 3 || counter === -3) {
+        markWinner(winningPossibility);
 
-          if (counter === 3 || counter === -3) {
-            markWinner(e);
-
-            return true;
-          }
-        }
+        return true;
+      }
     }
 
     return false;
@@ -117,7 +113,31 @@
   }
 
   function npcMove() {
-    if (difficultyLevel === 1) {
+    let necessaryAction = [];
+    if (difficultyLevel >= 2) {
+      // we run for each condition, so we can prioritize winning over prevention
+      condition:
+      for (let condition of [-2, 2]) {
+        for (let winningPossibility of winningPossibilityArray) {
+          let counter = arraySum(winningPossibility);
+
+          if (counter === condition) {
+            necessaryAction = winningPossibility;
+
+            break condition;
+          }
+        }
+      }
+    }
+
+    if (necessaryAction.length > 0) {
+      for (let field of necessaryAction) {
+        if (selectedArray[field] === 0) {
+          makeAMove(field);
+          break;
+        }
+      }
+    } else {
       let searchRandomField = true;
       while (searchRandomField === true) {
         let randomField = randomIntFromInterval(1, 9);
@@ -131,5 +151,9 @@
 
   function randomIntFromInterval(min, max) { // min and max included
     return Math.floor(Math.random() * (max - min + 1) + min);
+  }
+
+  function arraySum(array) {
+    return selectedArray[array[0]] + selectedArray[array[1]] + selectedArray[array[2]];
   }
 }
