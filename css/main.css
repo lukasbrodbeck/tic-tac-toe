@@ -291,7 +291,9 @@ h1 {
 .settings {
   display: flex;
   justify-content: center;
-  margin: 15px;
+  flex-direction: column;
+  margin: 15px auto;
+  max-width: 500px !important;
 }
 
 .button-wrapper {
