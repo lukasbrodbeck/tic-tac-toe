@@ -34,6 +34,9 @@
 
   $startButton.on('click', () => startGame());
 
+  /**
+   * Start a new game
+   */
   function startGame() {
     $playField.html('');
     currentTurn = $startingCheckbox.hasClass('checked') ? -1 : 1;
@@ -49,6 +52,9 @@
     }
   }
 
+  /**
+   * Build the playfield
+   */
   function buildPlayField() {
     for (let position = 1; position < 10; position++) {
       $playField.append('<div class="field-box" data-position="' + position + '"></div>');
@@ -57,6 +63,10 @@
     $playField.find('.field-box').on('click', (e) => selectField(e));
   }
 
+  /**
+   * Player clicks on a field
+   * @param e
+   */
   function selectField(e) {
     let currentPosition = $(e.currentTarget).data('position');
 
@@ -71,11 +81,19 @@
     }
   }
 
+  /**
+   * Apply styling to the chosen field
+   * @param position
+   */
   function markField(position) {
     $playField.find(`[data-position='${position}']`).addClass(getCurrentPlayer().toLowerCase());
     toggleErrorMessage('');
   }
 
+  /**
+   * Handle someones move
+   * @param position
+   */
   function makeAMove (position) {
     markField(position);
     turnCounter++;
@@ -90,6 +108,10 @@
     }
   }
 
+  /**
+   * Check whether someone won and the game is over
+   * @returns {boolean}
+   */
   function checkForWinner() {
     for (let winningPossibility of winningPossibilityArray) {
       let counter = arraySum(winningPossibility);
@@ -103,6 +125,10 @@
     return false;
   }
 
+  /**
+   * Manage the end of the game
+   * @param isWinner
+   */
   function endGame(isWinner) {
     isStarted = false;
     if (isWinner) {
@@ -112,6 +138,9 @@
     }
   }
 
+  /**
+   * Change the player
+   */
   function changeTurn() {
     currentTurn = -currentTurn;
     $infoBox.text('Der Spieler ' + getCurrentPlayer() + ' ist an der Reihe');
@@ -120,16 +149,27 @@
     }
   }
 
+  /**
+   * @returns {string}
+   */
   function getCurrentPlayer() {
     return currentTurn === 1 ? 'X' : 'O';
   }
 
-  function markWinner(e) {
-    for (let position of e) {
+  /**
+   * Highlights the winning fields
+   * @param winningArray
+   */
+  function markWinner(winningArray) {
+    for (let position of winningArray) {
       $playField.find(`[data-position='${position}']`).addClass('winning');
     }
   }
 
+  /**
+   * Let the AI do his thing
+   * Depending on the difficulty level there are multiple calculations
+   */
   function npcMove() {
     let necessaryAction = [];
     if (difficultyLevel >= 2) {
@@ -167,15 +207,29 @@
     }
   }
 
-  function randomIntFromInterval(min, max) { // min and max included
+  /**
+   * Returns a random integer value
+   * @param {number} min
+   * @param {number} max
+   * @returns {number}
+   */
+  function randomIntFromInterval(min = 1, max = 1) {
     return Math.floor(Math.random() * (max - min + 1) + min);
   }
 
-  function arraySum(array) {
+  /**
+   * @param array
+   * @returns {number}
+   */
+  function arraySum(array = [0, 0, 0]) {
     return selectedArray[array[0]] + selectedArray[array[1]] + selectedArray[array[2]];
   }
 
-  function toggleErrorMessage(errorMessage) {
+  /**
+   * If empty string is provided as errorMessage, hide the message
+   * @param {string} errorMessage
+   */
+  function toggleErrorMessage(errorMessage = '') {
     if (errorMessage !== '') {
       $errorMessage.removeClass('hidden');
     } else {
