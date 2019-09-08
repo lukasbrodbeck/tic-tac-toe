@@ -296,6 +296,7 @@ h1 {
   margin: 15px;
 }
 
+/* styling of playfield */
 .play-field {
   display: flex;
   flex-direction: row;
@@ -305,7 +306,7 @@ h1 {
   margin: auto;
 }
 
-.widget {
+.field {
   width: 100px;
   height: 100px;
   margin: auto;
@@ -315,8 +316,8 @@ h1 {
   position: relative;
 }
 
-.widget::before,
-.widget::after {
+.field::before,
+.field::after {
   content: "";
   display: block;
   width: 50px;
@@ -324,6 +325,20 @@ h1 {
   position: absolute;
 }
 
+.field.winning {
+  background-color: rgba(238, 118, 0, 0.2);
+}
+.field:nth-child(3n+1) {
+  border-right: solid 1px black;
+}
+.field:nth-child(3n+2) {
+  border-right: solid 1px black;
+}
+.field:nth-child(n+4) {
+  border-top: solid 1px black;
+}
+
+/* styling of marking */
 .x::before {
   transform: rotateZ(40deg);
 }
@@ -345,17 +360,4 @@ h1 {
   border-radius: 50%;
   top: 23px;
   left: 23px;
-}
-
-.widget.winning {
-  background-color: rgba(238, 118, 0, 0.2);
-}
-.widget:nth-child(3n+1) {
-  border-right: solid 1px black;
-}
-.widget:nth-child(3n+2) {
-  border-right: solid 1px black;
-}
-.widget:nth-child(n+4) {
-  border-top: solid 1px black;
 }

@@ -1,5 +1,5 @@
 {
-  let currentTurn = 1;
+  let currentTurn;
   let selectedArray = [];
   let $infoBox = $('#info');
   let $errorBox = $('#error');
@@ -21,38 +21,27 @@
 
   function startGame() {
     $playField.html('');
-    buildPlayField();
-    isStarted = true;
-    turnCounter = 0;
     currentTurn = 1;
+    isStarted = true;
+    buildPlayField();
+    $infoBox.html('Neues Spiel gestartet ' + getCurrentPlayer() + ' ist an der Reihe.');
+    $errorBox.html('');
+    turnCounter = 0;
   }
 
   function buildPlayField() {
     for (let position = 1; position < 10; position++) {
-      $playField.append('<div class="widget" data-position="' + position + '" data-tagged="false"></div>');
+      $playField.append('<div class="field" data-position="' + position + '"></div>');
       selectedArray[position] = 0;
     }
-    $playField.find('.widget').on('click', (e) => selectWidget(e));
+    $playField.find('.field').on('click', (e) => selectField(e));
   }
 
-  function selectWidget(e) {
-    let $currentItem = $(e.currentTarget);
+  function selectField(e) {
+    let currentPosition = $(e.currentTarget).data('position');
 
-    if (isStarted && $currentItem.data('tagged') === false) {
-      let currentPosition = $currentItem.data('position');
-      $currentItem.addClass(getCurrentPlayer().toLowerCase());
-      $currentItem.data('tagged', true);
-      turnCounter++;
-      $errorBox.text('');
-      selectedArray[currentPosition] = currentTurn;
-
-      if (checkForWinner(currentPosition)) {
-        endGame(true);
-      } else if (turnCounter >= 9) {
-        endGame(false);
-      } else {
-        changeTurn();
-      }
+    if (isStarted && selectedArray[currentPosition] === 0) {
+      makeAMove(currentPosition);
     } else {
       if (!isStarted) {
         $errorBox.text('Das Spiel ist vorbei. Bitte starten Sie ein neues.');
@@ -62,7 +51,26 @@
     }
   }
 
-  function checkForWinner(currentPosition) {
+  function markField(position) {
+    $playField.find(`[data-position='${position}']`).addClass(getCurrentPlayer().toLowerCase());
+    $errorBox.text('');
+  }
+
+  function makeAMove (position) {
+    markField(position);
+    turnCounter++;
+    selectedArray[position] = currentTurn;
+
+    if (checkForWinner()) {
+      endGame(true);
+    } else if (turnCounter >= 9) {
+      endGame(false);
+    } else {
+      changeTurn();
+    }
+  }
+
+  function checkForWinner() {
     for (let e of winningPossibilityArray) {
       let counter = 0;
         for (let element of e) {
