@@ -5,6 +5,7 @@
   let $errorMessage = $('.error-message');
   let $startButton = $('#start-button');
   let $playField = $('#play-field');
+  let $startingCheckbox = $('#starting-checkbox');
   let turnCounter = 0;
   let isStarted = false;
   // there are 3 difficulty levels, 1: total random movement, 2: tries to win/prevent if possible, 3: makes you cry
@@ -18,7 +19,10 @@
   winningPossibilityArray[5] = [3, 6, 9];
   winningPossibilityArray[6] = [1, 5, 9];
   winningPossibilityArray[7] = [3, 5, 7];
+
+  //semantic UI - instantiating of form + popup message
   $('#difficulty').dropdown();
+  $('.ui.checkbox').checkbox();
   $errorMessage.find('.close')
     .on('click', function() {
       $(this)
@@ -32,13 +36,17 @@
 
   function startGame() {
     $playField.html('');
-    currentTurn = 1;
+    currentTurn = $startingCheckbox.hasClass('checked') ? -1 : 1;
     isStarted = true;
     buildPlayField();
     $infoBox.html('Neues Spiel gestartet ' + getCurrentPlayer() + ' ist an der Reihe.');
     toggleErrorMessage('');
     turnCounter = 0;
     difficultyLevel = $('#difficulty-selection').find('.selected').data('value');
+
+    if (currentTurn === -1 && difficultyLevel > 0) {
+      npcMove();
+    }
   }
 
   function buildPlayField() {
