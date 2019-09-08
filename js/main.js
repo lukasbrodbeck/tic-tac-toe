@@ -7,6 +7,8 @@
   let $playField = $('#play-field');
   let turnCounter = 0;
   let isStarted = false;
+  // there are 3 difficulty levels, 1: total random movement, 2: tries to win/prevent if possible, 3: makes you cry
+  let difficultyLevel = 1;
   let winningPossibilityArray = [];
   winningPossibilityArray[0] = [1, 2, 3];
   winningPossibilityArray[1] = [4, 5, 6];
@@ -99,6 +101,9 @@
   function changeTurn() {
     currentTurn = -currentTurn;
     $infoBox.text('Der Spieler ' + getCurrentPlayer() + ' ist an der Reihe');
+    if (currentTurn === -1) {
+      npcMove();
+    }
   }
 
   function getCurrentPlayer() {
@@ -109,5 +114,22 @@
     for (let position of e) {
       $playField.find(`[data-position='${position}']`).addClass('winning');
     }
+  }
+
+  function npcMove() {
+    if (difficultyLevel === 1) {
+      let searchRandomField = true;
+      while (searchRandomField === true) {
+        let randomField = randomIntFromInterval(1, 9);
+        if (selectedArray[randomField] === 0) {
+          makeAMove(randomField);
+          searchRandomField = false;
+        }
+      }
+    }
+  }
+
+  function randomIntFromInterval(min, max) { // min and max included
+    return Math.floor(Math.random() * (max - min + 1) + min);
   }
 }
