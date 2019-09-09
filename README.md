@@ -1,4 +1,4 @@
-#Tic Tac Toe aka Dodelschach, 3 Gewinnt, etc.
+# Tic Tac Toe aka Dodelschach, 3 Gewinnt, etc.
 In diesem Repo habe ich eine basis Implementation für das allseits bekannte Tic Tac Toe Spiel erstellt.
 
 Spielregeln: Das Spielfeld ist 3 Felder hoch und 3 Felder breit. Die Spieler wählen abwechselnd Felder und markieren sie dabei. Dies erfolgt solange, bis ein Spieler drei Felder in horizontaler, vertikaler oder diagonaler Richtung markiert hat, oder alle Felder bereits markiert wurden.
