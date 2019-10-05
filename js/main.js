@@ -5,10 +5,12 @@
   const $infoBox = $('#info');
   const $errorMessage = $('.error-message');
   const $startButton = $('#start-button');
+  const $revertButton = $('#revert-button');
   const $playField = $('#play-field');
   const $startingCheckbox = $('#starting-checkbox');
   let turnCounter = 0;
   let isStarted = false;
+  let turnHistory = [];
   // there are 3 difficulty levels, 1: total random movement, 2: tries to win/prevent if possible, 3: makes you cry
   let difficultyLevel;
   const winningPossibilityArray = [];
@@ -28,6 +30,7 @@
     .on('click', () => toggleErrorMessage());
 
   $startButton.on('click', () => startGame());
+  $revertButton.on('click', () => revertMove());
 
   /**
    * Start a new game
@@ -41,6 +44,7 @@
     toggleErrorMessage();
     turnCounter = 0;
     difficultyLevel = $('#difficulty-selection').find('.selected').data('value');
+    turnHistory = [];
 
     if (currentTurn === -1 && difficultyLevel > 0) {
       npcMove();
@@ -77,11 +81,41 @@
   }
 
   /**
+   * Reverts the last move. If playing against NPC, revert 2 moves, so it's the players turn again
+   */
+  function revertMove () {
+    if (turnHistory.length > 0 && difficultyLevel === 0 || turnHistory.length > 1 && difficultyLevel > 0) {
+      if (!isStarted) isStarted = true;
+      let iteration = 1;
+      if (difficultyLevel > 0) {
+        iteration = 2;
+      } else {
+        changeTurn();
+      }
+
+      for (let i = 0; i < iteration; i++) {
+        const lastPosition = turnHistory.pop();
+        unmarkField(lastPosition);
+        selectedArray[lastPosition] = 0;
+      }
+      turnCounter -= iteration;
+    } else {
+      toggleErrorMessage('Derzeit sind noch keine Felder belegt.');
+    }
+  }
+
+  /**
    * Apply styling to the chosen field
    * @param position
    */
   function markField (position) {
     $playField.find(`[data-position='${position}']`).addClass(getCurrentPlayer().toLowerCase());
+    toggleErrorMessage();
+  }
+
+  function unmarkField (position) {
+    $playField.find(`[data-position='${position}']`).removeClass('x o');
+    $playField.find('.winning').removeClass('winning');
     toggleErrorMessage();
   }
 
@@ -91,13 +125,16 @@
    */
   function makeAMove (position) {
     markField(position);
+    turnHistory.push(position);
     turnCounter++;
     selectedArray[position] = currentTurn;
 
     if (checkForWinner()) {
       endGame(true);
+      changeTurn();
     } else if (turnCounter >= 9) {
       endGame(false);
+      changeTurn();
     } else {
       changeTurn();
     }
@@ -138,9 +175,11 @@
    */
   function changeTurn () {
     currentTurn = -currentTurn;
-    $infoBox.text('Der Spieler ' + getCurrentPlayer() + ' ist an der Reihe');
-    if (difficultyLevel > 0 && currentTurn === -1) {
-      npcMove();
+    if (isStarted) {
+      $infoBox.text('Der Spieler ' + getCurrentPlayer() + ' ist an der Reihe');
+      if (difficultyLevel > 0 && currentTurn === -1) {
+        npcMove();
+      }
     }
   }
 
