@@ -4,7 +4,7 @@
   "private": true,
   "dependencies": {},
   "scripts": {
-    "lint": "eslint --ignore-path .eslintignore .gitignore ."
+    "lint": "eslint --ignore-path .eslintignore ."
   },
   "browserslist": {
     "production": [

@@ -1,6 +1,5 @@
-import jQuery from 'jQuery';
-
-jQuery(document).ready(function ($) {
+/* global $ */
+{
   let currentTurn;
   const selectedArray = [];
   const $infoBox = $('#info');
@@ -235,4 +234,4 @@ jQuery(document).ready(function ($) {
       $errorMessage.find('#error-text').text(errorMessage);
     }
   }
-});
+}
