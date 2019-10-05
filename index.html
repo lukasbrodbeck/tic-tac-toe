@@ -3,19 +3,15 @@
 
 <head>
   <meta charset="utf-8">
-  <title>Tic Tac Toe</title>
+  <title>Tic Tac Toe / Dodelschach</title>
   <meta name="description" content="This is a simple Game of Tic Tac Toe">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-
+  <meta name="theme-color" content="#fafafa">
   <link rel="manifest" href="site.webmanifest">
   <link rel="apple-touch-icon" href="icon.png">
-  <!-- Place favicon.ico in the root directory -->
-
   <link rel="stylesheet" href="css/normalize.css">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.4.1/semantic.min.css" />
   <link rel="stylesheet" href="css/main.css">
-
-  <meta name="theme-color" content="#fafafa">
 </head>
 
 <body>
@@ -40,13 +36,13 @@
 
     <div class="settings ui form ">
       <div class="difficulty-setting field">
-        <label>Schwierigkeitsgrad</label>
+        <label for="difficulty">Schwierigkeitsgrad</label>
         <div class="ui dropdown selection" id="difficulty-selection">
           <select class="ui select-field" name="difficulty" id="difficulty">
             <option value="0">Menschlicher Gegner</option>
-            <option value="1">Easy</option>
+            <option value="1" selected>Easy</option>
             <option value="2">Medium</option>
-            <option value="3">Hard (soon)</option>
+            <option value="3">Hard</option>
           </select>
           <i class="dropdown icon"></i>
           <div class="text"></div>
@@ -54,9 +50,9 @@
       </div>
 
       <div class="field">
-        <div class="ui toggle checkbox" id="starting-checkbox">
-          <input type="checkbox" tabindex="0" class="hidden">
-          <label>Gegner startet zuerst</label>
+        <div class="ui toggle checkbox checked" id="starting-checkbox">
+          <input type="checkbox" tabindex="0" class="hidden" checked id="starting-player">
+          <label for="starting-player">Gegner startet zuerst</label>
         </div>
       </div>
     </div>

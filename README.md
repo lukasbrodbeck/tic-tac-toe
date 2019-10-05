@@ -15,7 +15,7 @@ Dieser besteht aus:
 * Menschlicher Gegner: hierbei wählt der Benutzer abwechselnd für die beiden Spieler ein Feld.
 * Easy: Der Computer wählt jedesmal ein rein zufälliges Feld aus.
 * Medium: Der Computer erkennt mögliche Siegbedingungen und setzt wählt die entsprechenden Felder. Genauso versucht er mögliche Siegbedingungen des Spielers zu verhindern. Wenn keine Siegbedingung zu erkennen ist, wählt er ein zufälliges Feld. So kann man ihn noch austricksen.
-* Hard *(coming soon)*: Diesen Computerspieler kann man nicht mehr überlisten. Es ist genau berechnet, dass der menschliche Spieler nur ein Unentschieden oder eine Niederlage erreichen kann.
+* Hard: Diesen Computerspieler kann man nicht mehr überlisten. Es ist genau berechnet, dass der menschliche Spieler nur ein Unentschieden oder eine Niederlage erreichen kann.
 
 
 ## Vernwendete Technologien
@@ -25,5 +25,8 @@ Das Spiel ist ausschließlich in Javascript / ECMA script geschrieben. Um mich a
 
 * Für das Styling wurde auf [Semantic UI](https://semantic-ui.com) zurückgegriffen
 
-## ES Lint for codestyling
-In order to improve the code style, we use ES Lint. To start this, run `npm run lint` 
+## Entwicklung
+Um das Spiel lokal zu starten, erst `yarn install` ausführen, damit dependencies geladen werden können. Anschließend kann das Spiel über die `index.html` datei gestartet werden. 
+
+## ES Lint für codestyling
+Für saubere Code Qualität wird ESLint verwendet. Die Ausführung ist über den Aufruf `npm run lint` möglich 
