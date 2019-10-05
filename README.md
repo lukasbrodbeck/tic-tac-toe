@@ -24,3 +24,6 @@ Das Spiel ist ausschließlich in Javascript / ECMA script geschrieben. Um mich a
 * Als Basis hierzu wurde eine [HTML Boilerplate](https://html5boilerplate.com/) verwendet, welche unter anderem auch [jQuery](https://jquery.com/) und [Modernizr](https://modernizr.com/) verwerndet.
 
 * Für das Styling wurde auf [Semantic UI](https://semantic-ui.com) zurückgegriffen
+
+## ES Lint for codestyling
+In order to improve the code style, we use ES Lint. To start this, run `npm run lint` 
