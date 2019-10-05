@@ -22,6 +22,8 @@
   winningPossibilityArray[5] = [3, 6, 9];
   winningPossibilityArray[6] = [1, 5, 9];
   winningPossibilityArray[7] = [3, 5, 7];
+  const cornerFields = [1, 3, 7, 9];
+  const middleFields = [2, 4, 6, 8];
 
   // semantic UI - instantiating of form + popup message
   $('.ui.select-field').dropdown();
@@ -84,7 +86,7 @@
    * Reverts the last move. If playing against NPC, revert 2 moves, so it's the players turn again
    */
   function revertMove () {
-    if (turnHistory.length > 0 && difficultyLevel === 0 || turnHistory.length > 1 && difficultyLevel > 0) {
+    if ((turnHistory.length > 0 && difficultyLevel === 0) || (turnHistory.length > 1 && difficultyLevel > 0)) {
       if (!isStarted) isStarted = true;
       let iteration = 1;
       if (difficultyLevel > 0) {
@@ -171,7 +173,7 @@
   }
 
   /**
-   * Change the player
+   * Change turn of players
    */
   function changeTurn () {
     currentTurn = -currentTurn;
@@ -233,12 +235,80 @@
         }
       }
     } else {
-      let searchRandomField = true;
-      while (searchRandomField === true) {
-        const randomField = randomIntFromInterval(1, 9);
-        if (selectedArray[randomField] === 0) {
-          makeAMove(randomField);
-          searchRandomField = false;
+      let fieldToPick = 0;
+      // expert mode
+      if (difficultyLevel > 2) {
+        // odd means NPC started, even means Player started
+        switch (turnCounter) {
+          case 0: {
+            fieldToPick = 1;
+            // could be random, but needs to change others case-logic for it to work
+            // fieldToPick = cornerFields[randomIntFromInterval(0, 3)];
+            break;
+          }
+          case 2: {
+            const opponentMove = turnHistory[turnHistory.length - 1];
+            if (opponentMove === 5) {
+              fieldToPick = 9;
+            } else if (middleFields.includes(opponentMove)) {
+              fieldToPick = 5;
+            } else if (cornerFields.includes(opponentMove)) {
+              // currently return in specific order, could be random
+              fieldToPick = assignableFieldFromArray(cornerFields);
+            }
+            break;
+          }
+          case 4: {
+            if (arraySum([1, 2, 3]) === -1 && fieldIsAssignable(3)) {
+              fieldToPick = 3;
+            } else if (arraySum([1, 4, 7]) === -1 && fieldIsAssignable(7)) {
+              fieldToPick = 7;
+            } else {
+              fieldToPick = assignableFieldFromArray(cornerFields);
+            }
+
+            break;
+          }
+          case 1: {
+            if (selectedArray[5] === 0) {
+              fieldToPick = 5;
+            } else {
+              fieldToPick = cornerFields[randomIntFromInterval(0, 3)];
+            }
+            break;
+          }
+          case 3: {
+            // checking for edge catch-22
+            if (arraySum([2, 4]) === 2) {
+              fieldToPick = 1;
+            } else if (arraySum([2, 6]) === 2) {
+              fieldToPick = 3;
+            } else if (arraySum([4, 8]) === 2) {
+              fieldToPick = 7;
+            } else if (arraySum([6, 8]) === 2) {
+              fieldToPick = 9;
+            } else if (arraySum(winningPossibilityArray[6]) === 1 || arraySum(winningPossibilityArray[7]) === 1) {
+              fieldToPick = assignableFieldFromArray(cornerFields);
+            }
+            break;
+          }
+          case 5: {
+            break;
+          }
+        }
+        if (fieldToPick > 0) {
+          makeAMove(fieldToPick);
+        }
+      }
+
+      if (fieldToPick === 0) {
+        let searchRandomField = true;
+        while (searchRandomField === true) {
+          fieldToPick = randomIntFromInterval(1, 9);
+          if (fieldIsAssignable(fieldToPick)) {
+            searchRandomField = false;
+            makeAMove(fieldToPick);
+          }
         }
       }
     }
@@ -248,6 +318,7 @@
    * Returns a random integer value
    * @param {number} min
    * @param {number} max
+   *
    * @returns {number}
    */
   function randomIntFromInterval (min = 1, max = 1) {
@@ -255,11 +326,38 @@
   }
 
   /**
-   * @param array
+   * @param {array} arrayToCheck
+   * @returns {int}
+   */
+  function assignableFieldFromArray (arrayToCheck) {
+    for (let i = 0; i < arrayToCheck.length; i++) {
+      if (fieldIsAssignable(arrayToCheck[i])) {
+        return arrayToCheck[i];
+      }
+    }
+
+    return 0;
+  }
+
+  /**
+   * @param {int} position
+   * @returns {boolean}
+   */
+  function fieldIsAssignable (position) {
+    return !turnHistory.includes(position);
+  }
+
+  /**
+   * @param {array} arrayToCheck
+   *
    * @returns {number}
    */
-  function arraySum (array = [0, 0, 0]) {
-    return selectedArray[array[0]] + selectedArray[array[1]] + selectedArray[array[2]];
+  function arraySum (arrayToCheck = [0, 0, 0]) {
+    let counter = 0;
+    for (let i = 0; i < arrayToCheck.length; i++) {
+      counter += parseInt(selectedArray[arrayToCheck[i]]);
+    }
+    return counter;
   }
 
   /**
