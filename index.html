@@ -40,9 +40,9 @@
         <div class="ui dropdown selection" id="difficulty-selection">
           <select class="ui select-field" name="difficulty" id="difficulty">
             <option value="0">Menschlicher Gegner</option>
-            <option value="1" selected>Easy</option>
+            <option value="1">Easy</option>
             <option value="2">Medium</option>
-            <option value="3">Hard</option>
+            <option value="3" selected>Hard</option>
           </select>
           <i class="dropdown icon"></i>
           <div class="text"></div>
@@ -62,6 +62,18 @@
     </div>
 
     <div class="play-field" id="play-field"></div>
+
+    <div class="ui modal small">
+      <i class="close icon"></i>
+      <div class="header"></div>
+      <div class="content">
+        <div class="description"></div>
+        <div class="finish-image" id="finish-image"></div>
+      </div>
+      <div class="actions">
+        <div class="ui green ok inverted button"><i class="checkmark icon"></i>Ok</div>
+      </div>
+    </div>
   </main>
   <footer>
 

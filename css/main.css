@@ -273,8 +273,12 @@ body {
   padding: 15px;
 }
 
+main {
+  padding: 15px 0;
+}
+
 .info-box {
-  margin: 15px auto;
+  margin: 0 auto 15px;
   max-width: 500px;
   position: relative;
 }
@@ -284,6 +288,9 @@ body {
   z-index: 100;
   top: 0;
   width: calc(100% - 30px);
+  max-width: 500px;
+  left: 50%;
+  transform: translateX(-50%);
   margin-top: 15px;
 }
 
@@ -374,4 +381,16 @@ body {
   border-radius: 50%;
   top: 23px;
   left: 23px;
+}
+
+.modal .description {
+  margin-bottom: 15px;
+}
+
+.finish-image {
+  height: 300px;
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-position: center;
+  margin: 0 auto;
 }

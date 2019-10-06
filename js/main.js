@@ -8,6 +8,8 @@
   const $revertButton = $('#revert-button');
   const $playField = $('#play-field');
   const $startingCheckbox = $('#starting-checkbox');
+  const $modal = $('.ui.modal');
+  const $finishImage = $('#finish-image');
   let turnCounter = 0;
   let isStarted = false;
   let turnHistory = [];
@@ -30,7 +32,6 @@
   $('.ui.checkbox').checkbox();
   $errorMessage.find('.close')
     .on('click', () => toggleErrorMessage());
-
   $startButton.on('click', () => startGame());
   $revertButton.on('click', () => revertMove());
 
@@ -165,11 +166,28 @@
    */
   function endGame (isWinner) {
     isStarted = false;
-    if (isWinner) {
-      $infoBox.text('Der Spieler ' + getCurrentPlayer() + ' hat das Spiel gewonnen');
-    } else {
-      $infoBox.text('Unentschieden. Es ist kein Zug mehr möglich.');
+    let title = '';
+    let description = '';
+    let searchQuery = '';
+    if (!isWinner) { // tie
+      title = 'Unentschieden';
+      description = 'Unentschieden. Es ist kein Zug mehr möglich.';
+      searchQuery = 'whatever';
+    } else if (isWinner && difficultyLevel > 0 && currentTurn === -1) { // npc won
+      title = 'Verloren';
+      description = 'Sie haben leider verloren. Vielleicht versuchen Sie es auf einer einfacheren Stufe nochmal.';
+      searchQuery = 'evil laugh';
+    } else { // player won, or 2 players fought each other
+      title = 'Gewonnen';
+      description = 'Gratulation der Spieler ' + getCurrentPlayer() + ' hat das Spiel gewonnen';
+      searchQuery = 'congratulations';
     }
+    updateGif(searchQuery);
+
+    $infoBox.text(description);
+    $modal.find('.header').text(title);
+    $modal.find('.description').text(description);
+    $modal.modal('show');
   }
 
   /**
@@ -370,5 +388,37 @@
       $errorMessage.transition('zoom', 200);
       $errorMessage.find('#error-text').text(errorMessage);
     }
+  }
+
+  /**
+   * fetches and displays a gif for the finishing screen
+   * the winner is an int and means 1 = player won; 2 = npc won; 3 = tie
+   * @param {string} searchQuery
+   */
+  function updateGif (searchQuery = "") {
+    // Giphy API defaults
+    const giphy = {
+      baseURL: 'https://api.giphy.com/v1/gifs/',
+      apiKey: '0UTRbFtkMxAplrohufYco5IY74U8hOes',
+      q: searchQuery,
+      type: 'search',
+      rating: 'g'
+    };
+    // Giphy API URL
+    const giphyURL = encodeURI(giphy.baseURL + giphy.type + '?api_key=' + giphy.apiKey + '&q=' + giphy.q);
+
+    $.ajax({
+      url: giphyURL,
+      context: document.body
+    })
+      .done(function (data) {
+        // we get returned 25 images and we pick a random one of them.
+        // Instead of pulling urls, we just use the id to build our own link
+        const id = data.data[randomIntFromInterval(0, 24)].id;
+
+        $finishImage.css({
+          'background-image': 'url("https://media.giphy.com/media/' + id + '/giphy.gif")'
+        });
+      });
   }
 }
