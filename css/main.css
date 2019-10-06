@@ -387,6 +387,10 @@ main {
   margin-bottom: 15px;
 }
 
+.finish-screen {
+  max-width: 500px;
+}
+
 .finish-image {
   height: 300px;
   background-size: contain;
