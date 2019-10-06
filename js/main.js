@@ -88,13 +88,18 @@
    */
   function revertMove () {
     if ((turnHistory.length > 0 && difficultyLevel === 0) || (turnHistory.length > 1 && difficultyLevel > 0)) {
-      if (!isStarted) isStarted = true;
       let iteration = 1;
       if (difficultyLevel > 0) {
         iteration = 2;
+
+        if (!isStarted && currentTurn === -1) {
+          iteration = 1;
+          changeTurn();
+        }
       } else {
         changeTurn();
       }
+      if (!isStarted) isStarted = true;
 
       for (let i = 0; i < iteration; i++) {
         const lastPosition = turnHistory.pop();
@@ -103,7 +108,7 @@
       }
       turnCounter -= iteration;
     } else {
-      toggleErrorMessage('Derzeit sind noch keine Felder belegt.');
+      toggleErrorMessage('Derzeit sind nicht genug Felder belegt um etwas Rückgängig zu machen.');
     }
   }
 
@@ -306,14 +311,26 @@
             } else if (arraySum([6, 8]) === 2) {
               fieldToPick = 9;
             } else if (arraySum(winningPossibilityArray[6]) === 1 || arraySum(winningPossibilityArray[7]) === 1) {
-              fieldToPick = assignableFieldFromArray(cornerFields);
+              fieldToPick = assignableFieldFromArray(middleFields);
+            } else if (arraySum([1, 6]) === 2 ||
+              arraySum([3, 4]) === 2 ||
+              arraySum([7, 6]) === 2 ||
+              arraySum([9, 4]) === 2) {
+              fieldToPick = assignableFieldFromArray([2, 8]);
+            } else if (arraySum([1, 8]) === 2 ||
+              arraySum([3, 8]) === 2 ||
+              arraySum([7, 2]) === 2 ||
+              arraySum([9, 2]) === 2) {
+              fieldToPick = assignableFieldFromArray([4, 6]);
             }
             break;
           }
-          case 5: {
-            break;
-          }
         }
+
+        if (fieldToPick === 0 && turnCounter < 8) {
+          fieldToPick = assignableFieldFromArray(searchForOffensiveMove());
+        }
+
         if (fieldToPick > 0) {
           makeAMove(fieldToPick);
         }
@@ -358,6 +375,36 @@
   }
 
   /**
+   * @param {array} arrayToCheck
+   * @returns {int}
+   */
+  function countAssignableFieldsInArray (arrayToCheck) {
+    let counter = 0;
+    for (let i = 0; i < arrayToCheck.length; i++) {
+      if (fieldIsAssignable(arrayToCheck[i])) {
+        counter++;
+      }
+    }
+
+    return counter;
+  }
+
+  /**
+   * Search the winning possibilities if there is a move which forces the opponent to act
+   *
+   * @returns {array}
+   */
+  function searchForOffensiveMove () {
+    for (let i = 0; i < winningPossibilityArray.length; i++) {
+      if (arraySum(winningPossibilityArray[i]) === -1 && countAssignableFieldsInArray(winningPossibilityArray[i]) === 2) {
+        return winningPossibilityArray[i];
+      }
+    }
+
+    return [];
+  }
+
+  /**
    * @param {int} position
    * @returns {boolean}
    */
@@ -395,7 +442,7 @@
    * the winner is an int and means 1 = player won; 2 = npc won; 3 = tie
    * @param {string} searchQuery
    */
-  function updateGif (searchQuery = "") {
+  function updateGif (searchQuery = '') {
     // Giphy API defaults
     const giphy = {
       baseURL: 'https://api.giphy.com/v1/gifs/',
